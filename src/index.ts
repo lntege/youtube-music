@@ -53,6 +53,8 @@ import {
 import { LoggerPrefix } from '@/utils';
 import { loadI18n, setLanguage, t } from '@/i18n';
 
+import ErrorHtmlAsset from '@assets/error.html?asset';
+
 import type { PluginConfig } from '@/types/plugins';
 
 if (!is.macOS()) {
@@ -80,11 +82,15 @@ if (!gotTheLock) {
   app.exit();
 }
 
+// Ozone platform hint: Required for Wayland support
+app.commandLine.appendSwitch('ozone-platform-hint', 'auto');
 // SharedArrayBuffer: Required for downloader (@ffmpeg/core-mt)
 // OverlayScrollbar: Required for overlay scrollbars
+// UseOzonePlatform: Required for Wayland support
+// WaylandWindowDecorations: Required for Wayland decorations
 app.commandLine.appendSwitch(
   'enable-features',
-  'OverlayScrollbar,SharedArrayBuffer',
+  'OverlayScrollbar,SharedArrayBuffer,UseOzonePlatform,WaylandWindowDecorations',
 );
 if (config.get('options.disableHardwareAcceleration')) {
   if (is.dev()) {
@@ -505,7 +511,7 @@ app.once('browser-window-created', (_event, win) => {
       if (errorCode !== -3) {
         // -3 is a false positive
         win.webContents.send('log', log);
-        win.webContents.loadFile(path.join(__dirname, 'error.html'));
+        win.webContents.loadFile(ErrorHtmlAsset);
       }
     },
   );
@@ -671,7 +677,9 @@ app.whenReady().then(async () => {
         );
       }
 
-      handleProtocol(command);
+      const splited = decodeURIComponent(command).split(' ');
+
+      handleProtocol(splited.shift()!, splited);
       return;
     }
 

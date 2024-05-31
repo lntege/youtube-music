@@ -162,6 +162,14 @@
                 "submenu": {
                   "import-css-file": "Import custom CSS file",
                   "no-theme": "No theme"
+                },
+                "dialog": {
+                  "remove-theme": "Are you sure you want to remove the custom theme?",
+                  "remove-theme-message": "This will remove the custom theme",
+                  "button": {
+                    "cancel": "Cancel",
+                    "remove": "Remove"
+                  }
                 }
               }
             }
@@ -579,6 +587,14 @@
     },
     "scrobbler": {
       "description": "Add scrobbling support (etc. last.fm, Listenbrainz)",
+      "dialog": {
+        "lastfm": {
+          "auth-failed": {
+            "title": "Authentication Failed",
+            "message": "Failed to authenticate with Last.fm\nHide the popup until the next restart."
+          }
+        }
+      },
       "menu": {
         "scrobble-other-media": "Scrobble other media",
         "lastfm": {
